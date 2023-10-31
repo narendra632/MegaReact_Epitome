@@ -11,6 +11,7 @@ essential commands - npm install react-router-dom - to handle routing
 
  # AppWrite
   Appwrite Cloud is a backend service that provides various functionalities to mobile, web, and Flutter applications 
+  setup - npm install appwrite
 
  # Vite
   fastest way to setup development environment for React JS
