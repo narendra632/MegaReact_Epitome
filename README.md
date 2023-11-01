@@ -29,6 +29,12 @@ essential commands - npm install react-router-dom - to handle routing
   Beautifully designed components that you can copy and paste into your apps. Accessible. Customizable using tailwind. Open Source.
 
 
+ # TanStack Query (React Query)
+  Powerful asynchronous state management for TS/JS, React, Solid, Vue and Svelte.
+  We are using some of its many features - Auto Caching, Auto Refetching, Infinite Scroll Queries, Pagination, SSR support, Mutations API
+     setup - npm install @tanstack/react-query
+
+
 
 
 
