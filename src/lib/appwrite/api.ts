@@ -24,7 +24,7 @@ export async function createUserAccount(user: INewUser) {
             username: user.username,
             imageUrl: avatarUrl,
            
-        })
+        });
 
 
         return newUser;
@@ -61,7 +61,7 @@ export async function saveUserToDB(user: {
 
 
 // Sign In User
-export async function signInAccount(user: { email: string; password: string; }) {
+export async function signInAccount(user: { email: string; password: string }) {
     try {
         const session = await account.createEmailSession(
             user.email,
@@ -94,5 +94,16 @@ export async function getCurrentUser() {
     } catch (error) {
         console.log(error);
         return null;
+    }
+}
+
+
+// Sign Out User
+export async function signOutAccount() {
+    try {
+        const session = await account.deleteSession("current");
+        return session;
+    } catch (error) {
+        console.log(error);
     }
 }
