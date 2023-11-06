@@ -23,7 +23,7 @@ const formSchema = z.object({
   }),
 })
 
-const PostForm = () => {
+const PostForm = ({ post }) => {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,7 +50,6 @@ const PostForm = () => {
               <FormControl>
                 <Textarea className="shad-textarea custom-scrollbar" />
               </FormControl>
-              
               <FormMessage className="shad-form_message" />
             </FormItem>
           )}
@@ -63,9 +62,10 @@ const PostForm = () => {
             <FormItem>
               <FormLabel className="shad-form_label">Add Photos</FormLabel>
               <FormControl>
-                <FileUploader></FileUploader>
+
+                <FileUploader fieldChange={field.onChange} mediaUrl={post?.mediaUrl}/>
+
               </FormControl>
-              
               <FormMessage className="shad-form_message" />
             </FormItem>
           )}
@@ -79,8 +79,7 @@ const PostForm = () => {
               <FormLabel className="shad-form_label">Add Location</FormLabel>
               <FormControl>
                 <Input type="text" className="shad-input"></Input>
-              </FormControl>
-              
+              </FormControl>  
               <FormMessage className="shad-form_message" />
             </FormItem>
           )}
@@ -95,7 +94,6 @@ const PostForm = () => {
               <FormControl>
                 <Input type="text" className="shad-input" placeholder="Art, Expression, Learn"></Input>
               </FormControl>
-              
               <FormMessage className="shad-form_message" />
             </FormItem>
           )}

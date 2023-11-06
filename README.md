@@ -8,6 +8,7 @@ This template provides a minimal setup to get React working in Vite with HMR and
 
  # React 
 essential commands - npm install react-router-dom - to handle routing
+            react packages - npm install react-dropzone
 
  # AppWrite
   Appwrite Cloud is a backend service that provides various functionalities to mobile, web, and Flutter applications 
