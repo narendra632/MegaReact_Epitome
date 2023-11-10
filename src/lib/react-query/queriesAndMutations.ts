@@ -11,7 +11,7 @@ import {
 
 import { QUERY_KEYS } from "@/lib/react-query/queryKeys";
 
-import { createUserAccount, signInAccount, signOutAccount, createPost } from '../appwrite/api'
+import { createUserAccount, signInAccount, signOutAccount, createPost, getRecentPosts } from '../appwrite/api'
 
 
 
@@ -54,3 +54,11 @@ export const useCreatePost = () => {
     });
   };
   
+  
+// Initialized the New Mutation Function for getting recent posts on the home page
+export const useGetRecentPosts = () => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+        queryFn: getRecentPosts,
+    });
+}

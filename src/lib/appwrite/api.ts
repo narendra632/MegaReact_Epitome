@@ -172,7 +172,7 @@ export async function uploadFile(file: File) {
 }
 
 
-// Get File Preview
+// This function will be used to get the file preview from the storage
 export function getFilePreview(fileId: string) {
     try {
         const fileUrl = storage.getFilePreview(
@@ -190,7 +190,7 @@ export function getFilePreview(fileId: string) {
 }
 
 
-// Delete File
+// This function will be used to delete the file from the storage
 export async function deleteFile(fileId: string) {
     try {
         await storage.deleteFile(
@@ -201,4 +201,18 @@ export async function deleteFile(fileId: string) {
     } catch (error) {
         console.log(error);
     }
+}
+
+
+// This function will be used to get the recent posts from the database
+export async function getRecentPosts() {
+    const posts = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.postCollectionId,
+        [ Query.orderDesc('$createdAt'), Query.limit(20) ],
+    );
+
+    if(!posts) throw Error;
+
+    return posts;
 }
