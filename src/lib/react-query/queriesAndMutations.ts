@@ -11,7 +11,7 @@ import {
 
 import { QUERY_KEYS } from "@/lib/react-query/queryKeys";
 
-import { createUserAccount, signInAccount, signOutAccount, createPost, getRecentPosts, likePost, savePost, deleteSavedPost, getCurrentUser, getPostById } from '../appwrite/api'
+import { createUserAccount, signInAccount, signOutAccount, createPost, getRecentPosts, likePost, savePost, deleteSavedPost, getCurrentUser, getPostById, updatePost, deletePost } from '../appwrite/api'
 
 
 
@@ -109,7 +109,7 @@ export const useSavePost = () => {
   }
 
 
-// Initialized the New Mutation Function for deleting a saved a post
+// Initialized the New Mutation Function for deleting a saved post
 export const useDeleteSavedPost = () => {
     const queryClient = useQueryClient();
 
@@ -148,3 +148,32 @@ export const useGetPostById = (postId: string) => {
     });
 }
 
+
+// Initialized the New Mutation Function to update the posts from the database
+export const useUpdatePost = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (post: IUpdatePost) => updatePost(post),
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id]
+            });
+        }
+    });
+}
+
+
+// Initialized the New Mutation Function to delete the posts from the database
+export const useDeletePost = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({postId, imageId}: {postId: string, imageId: string}) => deletePost(postId, imageId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.GET_RECENT_POSTS]
+            });
+        }
+    });
+}
