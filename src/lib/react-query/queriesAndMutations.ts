@@ -11,7 +11,7 @@ import {
 
 import { QUERY_KEYS } from "@/lib/react-query/queryKeys";
 
-import { createUserAccount, signInAccount, signOutAccount, createPost, getRecentPosts } from '../appwrite/api'
+import { createUserAccount, signInAccount, signOutAccount, createPost, getRecentPosts, likePost } from '../appwrite/api'
 
 
 
@@ -62,3 +62,27 @@ export const useGetRecentPosts = () => {
         queryFn: getRecentPosts,
     });
 }
+
+
+// Initialized the New Mutation Function for liking a post
+export const useLikePost = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn: ({postId, likesArray }: {postId: string; likesArray: string[] }) => likePost(postId, likesArray),
+      onSuccess: (data) => {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id]
+        });
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_RECENT_POSTS, data?.$id]
+        });
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_POSTS, data?.$id]
+        });
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_CURRENT_USER, data?.$id]
+        });
+      },
+    });
+  }
