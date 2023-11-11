@@ -11,7 +11,7 @@ import {
 
 import { QUERY_KEYS } from "@/lib/react-query/queryKeys";
 
-import { createUserAccount, signInAccount, signOutAccount, createPost, getRecentPosts, likePost, savePost, deleteSavedPost, getCurrentUser } from '../appwrite/api'
+import { createUserAccount, signInAccount, signOutAccount, createPost, getRecentPosts, likePost, savePost, deleteSavedPost, getCurrentUser, getPostById } from '../appwrite/api'
 
 
 
@@ -130,10 +130,21 @@ export const useDeleteSavedPost = () => {
   }
 
 
-// 
+// Initialized the New Mutation Function to get the current user from the database
 export const useGetCurrentUser = () => {
     return useQuery({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
         queryFn: getCurrentUser
     });
 }
+
+
+// Initialized the New Mutation Function to get the posts from the database
+export const useGetPostById = (postId: string) => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.GET_POST_BY_ID, postId],
+        queryFn: () => getPostById(postId),
+        enabled: !!postId,
+    });
+}
+

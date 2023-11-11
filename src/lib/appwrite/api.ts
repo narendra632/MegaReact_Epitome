@@ -278,3 +278,20 @@ export async function deleteSavedPost(savedRecordId: string) {
     }
 }
 
+
+// This function will be used to get the posts from the database
+export async function getPostById(postId: string) {
+    try {
+        const post = await databases.getDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.postCollectionId,
+            postId,
+        );
+
+        if(!post) throw Error;
+
+        return post;
+    } catch (error) {
+        console.log(error);
+    }
+}
