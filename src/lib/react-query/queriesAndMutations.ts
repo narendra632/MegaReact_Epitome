@@ -11,7 +11,7 @@ import {
 
 import { QUERY_KEYS } from "@/lib/react-query/queryKeys";
 
-import { createUserAccount, signInAccount, signOutAccount, createPost, getRecentPosts, likePost, savePost, deleteSavedPost, getCurrentUser, getPostById, updatePost, deletePost, getInfinitePosts, searchPosts } from '../appwrite/api'
+import { createUserAccount, signInAccount, signOutAccount, createPost, getRecentPosts, likePost, savePost, deleteSavedPost, getCurrentUser, getPostById, updatePost, deletePost, getInfinitePosts, searchPosts, getUsers } from '../appwrite/api'
 
 
 
@@ -203,3 +203,11 @@ export const useSearchPosts = (searchTerm: string) => {
         enabled: !!searchTerm,
     });
 }
+
+
+export const useGetUsers = (limit?: number) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USERS],
+    queryFn: () => getUsers(limit),
+  });
+};

@@ -381,7 +381,7 @@ export async function deletePost(postId: string, imageId: string) {
 
 // This function will be used to get the Infinite post on explore page from the database
 export async function getInfinitePosts({ pageParam }: {pageParam : number }) {
-    const queries: any[] = [ Query.orderDesc('$updatedAt'), Query.limit(10) ];
+    const queries: any[] = [ Query.orderDesc('$updatedAt'), Query.limit(9) ];
 
     if(pageParam) {
         queries.push(Query.cursorAfter(pageParam.toString()));
@@ -420,3 +420,27 @@ export async function searchPosts( searchTerm: string) {
         console.log(error);
     }
 }
+
+
+// This function will be used to get the Infinite post on explore page from the database
+export async function getUsers(limit?: number) {
+    const queries: any[] = [Query.orderDesc("$createdAt")];
+  
+    if (limit) {
+      queries.push(Query.limit(limit));
+    }
+  
+    try {
+      const users = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.userCollectionId,
+        queries
+      );
+  
+      if (!users) throw Error;
+  
+      return users;
+    } catch (error) {
+      console.log(error);
+    }
+  }
