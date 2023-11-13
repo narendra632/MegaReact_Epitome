@@ -444,3 +444,21 @@ export async function getUsers(limit?: number) {
       console.log(error);
     }
   }
+
+
+// This function will be used to get the user by id from the database
+export async function getUserById(userId: string) {
+  try {
+    const user = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      userId
+    );
+
+    if (!user) throw Error;
+
+    return user;
+  } catch (error) {
+    console.log(error);
+  }
+}
