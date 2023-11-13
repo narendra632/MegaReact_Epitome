@@ -37,7 +37,7 @@ export async function createUserAccount(user: INewUser) {
 }
 
 
-// Save User to Database
+// Save the User to Database
 export async function saveUserToDB(user: {
     accountId: string;
     email: string;
