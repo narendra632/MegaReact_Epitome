@@ -11,7 +11,7 @@ import {
 
 import { QUERY_KEYS } from "@/lib/react-query/queryKeys";
 
-import { createUserAccount, signInAccount, signOutAccount, createPost, getRecentPosts, likePost, savePost, deleteSavedPost, getCurrentUser, getPostById, updatePost, deletePost, getInfinitePosts, searchPosts, getUsers, getUserById } from '../appwrite/api'
+import { createUserAccount, signInAccount, signOutAccount, createPost, getRecentPosts, likePost, savePost, deleteSavedPost, getCurrentUser, getPostById, updatePost, deletePost, getInfinitePosts, searchPosts, getUsers, getUserById, updateUser } from '../appwrite/api'
 
 
 
@@ -205,6 +205,7 @@ export const useSearchPosts = (searchTerm: string) => {
 }
 
 
+// Initialized the New Mutation Function to get the users from the database
 export const useGetUsers = (limit?: number) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_USERS],
@@ -213,10 +214,29 @@ export const useGetUsers = (limit?: number) => {
 };
 
 
+// Initialized the New Mutation to get user by id from the database
 export const useGetUserById = (userId: string) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
     queryFn: () => getUserById(userId),
     enabled: !!userId,
+  });
+};
+
+
+
+// Initialized the New Mutation Function to update the user from the database
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (user: IUpdateUser) => updateUser(user),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USER_BY_ID, data?.$id],
+      });
+    },
   });
 };
