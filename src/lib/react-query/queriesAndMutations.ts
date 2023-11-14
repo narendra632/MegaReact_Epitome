@@ -11,7 +11,24 @@ import {
 
 import { QUERY_KEYS } from "@/lib/react-query/queryKeys";
 
-import { createUserAccount, signInAccount, signOutAccount, createPost, getRecentPosts, likePost, savePost, deleteSavedPost, getCurrentUser, getPostById, updatePost, deletePost, getInfinitePosts, searchPosts, getUsers, getUserById, updateUser } from '../appwrite/api'
+import { createUserAccount,
+         signInAccount,  
+         getCurrentUser, 
+         signOutAccount, 
+         getUsers, 
+         createPost, 
+         getPostById, 
+         updatePost,
+         getUserPosts,  
+         deletePost, 
+         likePost, 
+         getUserById, 
+         updateUser, 
+         getRecentPosts, 
+         getInfinitePosts,  
+         searchPosts, 
+         savePost, 
+         deleteSavedPost } from '../appwrite/api'
 
 
 
@@ -181,18 +198,31 @@ export const useDeletePost = () => {
 
 // Initialized the New Mutation Function to get the posts from the database
 export const useGetPosts = () => {
-    return useInfiniteQuery({
-        queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
-        queryFn: getInfinitePosts,
-        getNextPageParam: (lastPage) => {
-            if (lastPage && lastPage.documents.length === 0) return null;
+  return useInfiniteQuery({
+    queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
+    queryFn: getInfinitePosts as any,
+    getNextPageParam: (lastPage: any) => {
+      // If there's no data, there are no more pages.
+      if (lastPage && lastPage.documents.length === 0) {
+        return null;
+      }
 
-            const lastId = lastPage?.documents[lastPage?.documents.length - 1].$id;
+      // Use the $id of the last document as the cursor.
+      const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
+      return lastId;
+    },
+  });
+};
 
-            return lastId;
-        },
-    });
-}
+
+// Initialized the New Mutation Function to get the user's posts from the database
+export const useGetUserPosts = (userId?: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_POSTS, userId],
+    queryFn: () => getUserPosts(userId),
+    enabled: !!userId,
+  });
+};
 
 
 // Initialized the New Mutation Function to search the posts from the database

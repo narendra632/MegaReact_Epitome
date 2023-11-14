@@ -74,6 +74,17 @@ export async function signInAccount(user: { email: string; password: string }) {
 }
 
 
+// ============================== GET ACCOUNT
+export async function getAccount() {
+    try {
+      const currentAccount = await account.get();
+  
+      return currentAccount;
+    } catch (error) {
+      console.log(error);
+    }
+}
+  
 
 // This function will be used to get the current user from the database
 export async function getCurrentUser() {
@@ -107,6 +118,9 @@ export async function signOutAccount() {
         console.log(error);
     }
 }
+
+
+
 
 
 // Create New Post
@@ -204,75 +218,43 @@ export async function deleteFile(fileId: string) {
 }
 
 
-// This function will be used to get the recent posts from the database
-export async function getRecentPosts() {
-    const posts = await databases.listDocuments(
-        appwriteConfig.databaseId,
-        appwriteConfig.postCollectionId,
-        [ Query.orderDesc('$createdAt'), Query.limit(20) ],
-    );
-
-    if(!posts) throw Error;
-
-    return posts;
-}
-
-
-// This function will be used to like a post
-export async function likePost(postId: string, likesArray: string[]) {
+// This function will be used to get the searched post on explore page
+export async function searchPosts( searchTerm: string) {
+    
     try {
-        const updatedPost = await databases.updateDocument(
+        const posts = await databases.listDocuments(
             appwriteConfig.databaseId,
             appwriteConfig.postCollectionId,
-            postId,
-            {
-                likes: likesArray,
-            }
+            [ Query.search('caption', searchTerm )]
         );
 
-        if(!updatedPost) throw Error;
+        if(!posts) throw Error;
 
-        return updatedPost;
-    } catch (error) {
-        console.log(error);
-    }
-} 
-
-
-// This function will be used to save a post
-export async function savePost(postId: string, userId: string,) {
-    try {
-        const updatedPost = await databases.createDocument(
-            appwriteConfig.databaseId,
-            appwriteConfig.savesCollectionId,
-            ID.unique(),
-            {
-                user: userId,
-                post: postId,
-            }
-        );
-
-        if(!updatedPost) throw Error;
-
-        return updatedPost;
+        return posts;
     } catch (error) {
         console.log(error);
     }
 }
 
 
-// This function will be used to delete a saved post
-export async function deleteSavedPost(savedRecordId: string) {
+// This function will be used to get the Infinite post on explore page from the database
+export async function getInfinitePosts({ pageParam }: {pageParam : number }) {
+    const queries: any[] = [ Query.orderDesc('$updatedAt'), Query.limit(9) ];
+
+    if(pageParam) {
+        queries.push(Query.cursorAfter(pageParam.toString()));
+    }
+
     try {
-        const statusCode = await databases.deleteDocument(
+        const posts = await databases.listDocuments(
             appwriteConfig.databaseId,
-            appwriteConfig.savesCollectionId,
-            savedRecordId,
+            appwriteConfig.postCollectionId,
+            queries,
         );
 
-        if(!statusCode) throw Error;
+        if(!posts) throw Error;
 
-        return { status: "ok"};
+        return posts;
     } catch (error) {
         console.log(error);
     }
@@ -379,48 +361,100 @@ export async function deletePost(postId: string, imageId: string) {
 }
 
 
-// This function will be used to get the Infinite post on explore page from the database
-export async function getInfinitePosts({ pageParam }: {pageParam : number }) {
-    const queries: any[] = [ Query.orderDesc('$updatedAt'), Query.limit(9) ];
-
-    if(pageParam) {
-        queries.push(Query.cursorAfter(pageParam.toString()));
-    }
-
+// This function will be used to like a post
+export async function likePost(postId: string, likesArray: string[]) {
     try {
-        const posts = await databases.listDocuments(
+        const updatedPost = await databases.updateDocument(
             appwriteConfig.databaseId,
             appwriteConfig.postCollectionId,
-            queries,
+            postId,
+            {
+                likes: likesArray,
+            }
         );
 
-        if(!posts) throw Error;
+        if(!updatedPost) throw Error;
 
-        return posts;
+        return updatedPost;
+    } catch (error) {
+        console.log(error);
+    }
+} 
+
+
+// This function will be used to save a post
+export async function savePost(postId: string, userId: string,) {
+    try {
+        const updatedPost = await databases.createDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.savesCollectionId,
+            ID.unique(),
+            {
+                user: userId,
+                post: postId,
+            }
+        );
+
+        if(!updatedPost) throw Error;
+
+        return updatedPost;
     } catch (error) {
         console.log(error);
     }
 }
 
 
-// This function will be used to get the searched post on explore page
-export async function searchPosts( searchTerm: string) {
-    
+// This function will be used to delete a saved post
+export async function deleteSavedPost(savedRecordId: string) {
     try {
-        const posts = await databases.listDocuments(
+        const statusCode = await databases.deleteDocument(
             appwriteConfig.databaseId,
-            appwriteConfig.postCollectionId,
-            [ Query.search('caption', searchTerm )]
+            appwriteConfig.savesCollectionId,
+            savedRecordId,
         );
 
-        if(!posts) throw Error;
+        if(!statusCode) throw Error;
 
-        return posts;
+        return { status: "ok"};
     } catch (error) {
         console.log(error);
     }
 }
 
+
+// This function will be used to get the recent posts from the database
+export async function getRecentPosts() {
+    const posts = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.postCollectionId,
+        [ Query.orderDesc('$createdAt'), Query.limit(20) ],
+    );
+
+    if(!posts) throw Error;
+
+    return posts;
+}
+
+
+// ============================== GET USER'S POST
+export async function getUserPosts(userId?: string) {
+    if (!userId) return;
+  
+    try {
+      const post = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.postCollectionId,
+        [Query.equal("creator", userId), Query.orderDesc("$createdAt")]
+      );
+  
+      if (!post) throw Error;
+  
+      return post;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
 
 // This function will be used to get the Infinite post on explore page from the database
 export async function getUsers(limit?: number) {
@@ -443,7 +477,7 @@ export async function getUsers(limit?: number) {
     } catch (error) {
       console.log(error);
     }
-  }
+}
 
 
 // This function will be used to get the user by id from the database
@@ -462,7 +496,6 @@ export async function getUserById(userId: string) {
     console.log(error);
   }
 }
-
 
 
 // This function will be used to update the user profile
@@ -521,4 +554,4 @@ export async function updateUser(user: IUpdateUser) {
     } catch (error) {
       console.log(error);
     }
-  }
+}
