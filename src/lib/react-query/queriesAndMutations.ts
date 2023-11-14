@@ -69,7 +69,7 @@ export const useCreatePost = () => {
         });
       },
     });
-  };
+};
   
   
 // Initialized the New Mutation Function for getting recent posts on the home page
@@ -102,7 +102,7 @@ export const useLikePost = () => {
         });
       },
     });
-  }
+}
 
 
 // Initialized the New Mutation Function for saving a post
@@ -123,7 +123,7 @@ export const useSavePost = () => {
         });
       },
     });
-  }
+}
 
 
 // Initialized the New Mutation Function for deleting a saved post
@@ -144,7 +144,7 @@ export const useDeleteSavedPost = () => {
         });
       },
     });
-  }
+}
 
 
 // Initialized the New Mutation Function to get the current user from the database
@@ -184,7 +184,7 @@ export const useUpdatePost = () => {
 // Initialized the New Mutation Function to delete the posts from the database
 export const useDeletePost = () => {
     const queryClient = useQueryClient();
-
+    
     return useMutation({
         mutationFn: ({postId, imageId}: {postId: string, imageId: string}) => deletePost(postId, imageId),
         onSuccess: () => {
@@ -214,7 +214,6 @@ export const useGetPosts = () => {
     },
   });
 }
-
 
 
 // Initialized the New Mutation Function to get the user's posts from the database
@@ -254,7 +253,6 @@ export const useGetUserById = (userId: string) => {
     enabled: !!userId,
   });
 };
-
 
 
 // Initialized the New Mutation Function to update the user from the database
