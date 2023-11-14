@@ -201,6 +201,7 @@ export const useGetPosts = () => {
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
     queryFn: getInfinitePosts as any,
+    initialPageParam: 0, // or a function that returns 0
     getNextPageParam: (lastPage: any) => {
       // If there's no data, there are no more pages.
       if (lastPage && lastPage.documents.length === 0) {
@@ -212,7 +213,8 @@ export const useGetPosts = () => {
       return lastId;
     },
   });
-};
+}
+
 
 
 // Initialized the New Mutation Function to get the user's posts from the database
