@@ -26,11 +26,6 @@ const SignupForm = () => {
   const navigate = useNavigate();
   const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
 
-  // react query hooks to create a new user account and sign in the user
-  const { mutateAsync: createUserAccount, isPending: isCreatingAccount } = useCreateUserAccount();
-  const { mutateAsync: signInAccount, isPending: isSigningIn } = useSignInAccount();
-
-  
   // 1. Define your form validation schema
   // This will be used to validate the form values
   const form = useForm<z.infer<typeof SignupValidation>>({
@@ -43,6 +38,12 @@ const SignupForm = () => {
     },
   });
  
+
+  // react query hooks to create a new user account and sign in the user
+  const { mutateAsync: createUserAccount, isPending: isCreatingAccount } = useCreateUserAccount();
+  const { mutateAsync: signInAccount, isPending: isSigningIn } = useSignInAccount();
+
+  
 
   // 2. Handle form submit.
   // This function will be called when the user clicks on the submit button
@@ -160,7 +161,7 @@ const SignupForm = () => {
             )}
           />
           <Button type="submit" className="shad-button_primary">
-            {isCreatingAccount ? (
+            {isCreatingAccount || isUserLoading || isSigningIn ? (
               <div className="flex-center gap-2">
                 <Loader />
                 Loading...
