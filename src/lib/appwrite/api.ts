@@ -120,9 +120,6 @@ export async function signOutAccount() {
 }
 
 
-
-
-
 // Create New Post
 export async function createPost(post: INewPost) {
     try {
