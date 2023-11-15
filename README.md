@@ -54,4 +54,4 @@ This project is open for contributions. If you want to add a feature, fix a bug,
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE.md](LICENSE) file for more details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for more details.
