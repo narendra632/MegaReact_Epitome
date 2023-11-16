@@ -236,7 +236,7 @@ export async function searchPosts( searchTerm: string) {
 
 // This function will be used to get the Infinite post on explore page from the database
 export async function getInfinitePosts({ pageParam }: {pageParam : number }) {
-    const queries: any[] = [ Query.orderDesc('$updatedAt'), Query.limit(9) ];
+    const queries: any[] = [ Query.orderDesc('$updatedAt'), Query.limit(6) ];
 
     if(pageParam) {
         queries.push(Query.cursorAfter(pageParam.toString()));
